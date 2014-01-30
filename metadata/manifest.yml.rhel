@@ -20,7 +20,7 @@ Categories:
 - service
 - python
 - embedded
-Website: http://www.python.org
+Website: https://github.com/alewisohn/openshift-python-cartridge
 Help-Topics:
   Developer Center: https://www.openshift.com/developers
 Provides:
