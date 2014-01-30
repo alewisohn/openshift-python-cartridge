@@ -8,7 +8,7 @@ Description: 'Python is a general-purpose, high-level programming language whose
 Version: '2.7-scl'
 Versions:
 - '2.6'
-- '2.7-scl'
+- '2.7'
 - '3.3'
 License: The Python License, version 2.6
 License-Url: http://docs.python.org/3/license.html
@@ -57,7 +57,7 @@ Endpoints:
     Options:
       health: true
 Version-Overrides:
-  '2.7-scl':
+  '2.7':
     Display-Name: Python 2.7
     License: The Python License, version 2.7.3
     Provides:

@@ -2,14 +2,49 @@
 
 source $OPENSHIFT_CARTRIDGE_SDK_BASH
 
-case "$1" in
-    -v|--version)
-      version="$2"
-esac
+PYTHON_VERSION="2.7.5"
+PYTHON_DIR="$OPENSHIFT_PYTHON_DIR"
+VIRTUALENV_DIR="$OPENSHIFT_PYTHON_DIR/virtenv"
 
-echo "$version" > "$OPENSHIFT_PYTHON_DIR/env/OPENSHIFT_PYTHON_VERSION"
+# Try to guess the number of processors from /proc/cpuinfo.
+if [ -f /proc/cpuinfo ]; then
+    NUMBER_OF_PROCESSORS=$(grep -c ^processor /proc/cpuinfo)
+else
+    NUMBER_OF_PROCESSORS=1
+fi
 
-mkdir -p $OPENSHIFT_PYTHON_DIR/template
+function check_python() {
+    msg_info "Checking for python..."
+    if [ -d $PYTHON_DIR ]; then
+        msg_success "Checking for python... already installed."
+        return
+    fi
 
-# Call the version specific install script
-exec $OPENSHIFT_PYTHON_DIR/usr/versions/$version/bin/install $version
+    msg_info "Installing python $PYTHON_VERSION..."
+    cd $OPENSHIFT_TMP_DIR
+    wget http://python.org/ftp/python/$PYTHON_VERSION/Python-$PYTHON_VERSION.tar.bz2
+
+    tar xfj Python-$PYTHON_VERSION.tar.bz2
+    cd Python-$PYTHON_VERSION
+    ./configure --prefix=$PYTHON_DIR
+    make install -j$NUMBER_OF_PROCESSORS
+
+    check_status $? "Installing python $PYTHON_VERSION..."
+}
+
+# virtualenv is already provided by OpenShift
+# so we don't need to compile and install it
+function check_venv() {
+    msg_info "Checking for virtualenv..."
+    if [ -d $VIRTUALENV_DIR ]; then
+        msg_success "Checking for virtualenv... exists."
+        return
+    fi
+
+    msg_info "Creating virtualenv..."
+    virtualenv --no-site-packages --python="$PYTHON_DIR/bin/python" $VIRTUALENV_DIR
+    check_status $? 'Creating virtualenv...'
+}
+
+check_python
+check_venv
