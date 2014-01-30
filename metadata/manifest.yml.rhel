@@ -1,7 +1,7 @@
 ---
 Name: python
 Cartridge-Short-Name: PYTHON
-Display-Name: Python 2.6
+Display-Name: Python
 Description: 'Python is a general-purpose, high-level programming language whose design
   philosophy emphasizes code readability. Popular development frameworks include:
   Django, Bottle, Pylons, Zope and TurboGears.'
@@ -19,6 +19,7 @@ Cartridge-Vendor: redhat
 Categories:
 - service
 - python
+- embedded
 Website: http://www.python.org
 Help-Topics:
   Developer Center: https://www.openshift.com/developers
